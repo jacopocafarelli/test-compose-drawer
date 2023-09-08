@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.example.testapplication.databinding.FragmentMainContainerBinding
+import com.example.testapplication.databinding.FragmentMainSwipeContentBinding
 import com.example.testapplication.ui.theme.TestApplicationTheme
 import kotlinx.coroutines.launch
 
@@ -66,10 +67,11 @@ class MainActivity : AppCompatActivity() {
                     end = paddingValues.calculateEndPadding(LayoutDirection.Ltr) + 16.dp,
                     bottom = paddingValues.calculateBottomPadding() + 8.dp
                 )
-                FragmentContentWithColumn(modifier)
-                //FragmentContentWithoutColumn(modifier)
-                //GreetingWithColumn(modifier)
-                //GreetingWithoutColumn(modifier)
+                FragmentContentWithColumn(modifier) // Fragment is displayed and no swipe up bug
+//                FragmentContentWithoutColumn(modifier) // Fragment is displayed and swipe up bug
+//                FragmentContentWithColumnSwipeRefresh(modifier) // Fragment has 0 height
+//                GreetingWithColumn(modifier) // No swipe up bug
+//                GreetingWithoutColumn(modifier) // Swipe up bug
             }
         }
     }
@@ -97,6 +99,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
+    private fun FragmentContentWithColumnSwipeRefresh(modifier: Modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            AndroidViewBinding(
+                factory = FragmentMainSwipeContentBinding::inflate,
+                modifier = modifier.fillMaxSize()
+            )
+        }
+    }
+
+    @Composable
     fun GreetingWithColumn(modifier: Modifier = Modifier) {
         Column(
             modifier = modifier
@@ -104,7 +120,7 @@ class MainActivity : AppCompatActivity() {
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = "Hello!",
+                text = "Greetings!",
                 modifier = Modifier
             )
         }
@@ -113,7 +129,7 @@ class MainActivity : AppCompatActivity() {
     @Composable
     fun GreetingWithoutColumn(modifier: Modifier = Modifier) {
         Text(
-            text = "Hello!",
+            text = "Greetings!",
             modifier = modifier
         )
     }
